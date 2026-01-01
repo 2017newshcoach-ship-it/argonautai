@@ -1,0 +1,5 @@
+{
+  "name": "MyStyle AI Blog Agent",
+  "description": "A multi-step AI agent that analyzes your personal writing style and generates high-quality, fact-checked blog posts with Google Search grounding.",
+  "requestFramePermissions": []
+}
