@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI, SchemaType, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
-import { Platform, KeywordSuggestion, TopicSuggestion, OutlineOption, BlogInput, StyleCard, QualityReport, GroundingSource, SearchPeriod, InsightOption, ResearchSource, InsightCard, Blueprint } from "../types";
+import { Platform, KeywordSuggestion, TopicSuggestion, OutlineOption, BlogInput, StyleCard, QualityReport, GroundingSource, SearchPeriod, InsightOption, ResearchSource, InsightCard, Blueprint, PostBrief } from "../types";
 import { PROMPTS } from "./prompts";
 
 function cleanJson(text: string): string {
@@ -382,6 +382,47 @@ export async function* runWriterStream(input: BlogInput, style: StyleCard, resea
   }
 }
 
+export async function* runWriterWsg3(input: BlogInput) {
+  const genAI = getGenAI();
+  const prompt = PROMPTS.writeBlogWsg3(input.postBrief, input.insightCard);
+
+  // Use Gemini 3 Pro for high adherence instructions + Web Search for references
+  let model = genAI.getGenerativeModel({
+    model: "gemini-3-pro-preview",
+    tools: [{ googleSearch: {} } as any]
+  });
+
+  try {
+    const result = await model.generateContentStream(prompt);
+
+    // Note: Streaming with tools might behave differently. 
+    // If the tool is invoked, it might not stream text immediately until tool returns.
+    // For this implementation, we assume the model handles "search then write" or "write then search" flow.
+    // Given the prompt instruction "After writing body... search references", it might do text first then tool, or vice versa.
+
+    for await (const chunk of result.stream) {
+      // Chunk text might differ if tool use logic is active. 
+      // Safely extracting text.
+      const chunkText = chunk.text();
+      if (chunkText) {
+        yield chunkText;
+      }
+    }
+  } catch (error: any) {
+    console.error("Writer WSG3 Error:", error);
+    yield `\n\n(오류 발생: ${error.message})\n\n`;
+
+    // Fallback to Flash without tools if Pro fails
+    yield "\n\n(시스템: 검색 도구 연결 실패로 고속 작성 모드로 전환합니다...)\n\n";
+    const flashModel = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+    const result = await flashModel.generateContentStream(prompt);
+    for await (const chunk of result.stream) {
+      yield chunk.text();
+    }
+  }
+}
+
+
 export async function runQualityGate(content: string, platform: Platform): Promise<QualityReport> {
   const genAI = getGenAI();
   const model = genAI.getGenerativeModel({
@@ -474,6 +515,53 @@ export async function runDeepResearch(topic: string, useInternal: boolean, knowl
     rawContext: rawData
   };
 }
+
+export async function runBriefBuilder(insightCard: InsightCard): Promise<PostBrief> {
+  const genAI = getGenAI();
+  const model = genAI.getGenerativeModel({
+    model: "gemini-3-pro-preview", // Higher reasoning needed for clustering
+    generationConfig: { responseMimeType: "application/json" }
+  });
+
+  const prompt = PROMPTS.buildPostBrief(insightCard);
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const brief = JSON.parse(cleanJson(response.text() || "{}"));
+    return brief;
+  } catch (e) {
+    console.error("Brief Builder Error", e);
+    throw new Error("브리핑 생성에 실패했습니다.");
+  }
+}
+
+
+export async function analyzeManualReport(reportText: string): Promise<InsightCard> {
+  const genAI = getGenAI();
+  const model = genAI.getGenerativeModel({
+    model: "gemini-3-flash-preview",
+    generationConfig: { responseMimeType: "application/json" }
+  });
+
+  const prompt = PROMPTS.analyzeManualReport(reportText);
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const parsed = JSON.parse(cleanJson(response.text() || "{}"));
+
+    return {
+      facts: parsed.facts || ["수동 리포트 분석 실패"],
+      sources: parsed.sources || [],
+      rawContext: reportText // Keep original text as context
+    };
+  } catch (e) {
+    console.error("Manual Report Analysis Error", e);
+    throw new Error("수동 리포트 분석에 실패했습니다.");
+  }
+}
+
 
 export async function suggestBlueprint(topic: string, insightCard: InsightCard, styleGuide: string, brandGuide: string, targetAudience: string): Promise<Blueprint> {
   const genAI = getGenAI();

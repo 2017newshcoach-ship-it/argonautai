@@ -233,6 +233,102 @@ export const PROMPTS = {
     }
   `,
 
+  analyzeManualReport: (reportText: string) => `
+    당신은 **데이터 정규화 전문가**입니다.
+    사용자가 붙여넣은 [외부 리서치 리포트]를 분석하여, 블로그 작성에 필요한 표준 포맷(Insight Card)으로 변환하십시오.
+
+    [Input Report]
+    ${reportText.substring(0, 20000)}
+
+    [Rules]
+    1. **Fact Extraction**: 리포트 내의 핵심 사실/통계/전략을 최대 10개까지 추출하십시오.
+    2. **Source Detection**: URL이나 출처 언급이 있다면 최대한 sources 배열에 포함하십시오. (없으면 빈 배열)
+    3. **No Hallucination**: 원문에 없는 내용은 절대 지어내지 마십시오.
+
+    [Output JSON Format]
+    {
+      "facts": ["..."],
+      "sources": [{ "id": "src_1", "title": "...", "url": "..." }]
+    }
+  `,
+
+  buildPostBrief: (insightCard: any) => `
+    [POST BRIEF Builder v2.0 | RESOURCE-first | 본문=RESOURCE-only 전제]
+
+    역할: 너는 SuperfastSAT 블로그 에디터입니다.
+    목표: [RESOURCE]만 근거로 [POST BRIEF]를 역추출해 생성합니다.
+    중요: RESOURCE에 없는 사실/수치/단정은 만들지 않습니다.
+
+    [RESOURCE (Insight Card)]
+    Facts: ${JSON.stringify(insightCard.facts)}
+    Sources: ${JSON.stringify(insightCard.sources)}
+
+    [작업 절차]
+    1. RESOURCE의 핵심 주장/규칙/개념을 주제 덩어리 2~5개로 묶습니다(클러스터).
+    2. **메인 클러스터**를 1개만 선택해 잠급니다. (기준: 반복 많음, 행동 루틴 있음, 경계선 명확)
+    3. 아래 [POST BRIEF] 항목은 "메인 클러스터"에서만 작성합니다.
+    4. 메인 클러스터 기반으로 '추천 케이스(A~H)'를 1개 고릅니다.
+       - A: 정의 → 판정 규칙 → 학습 루틴
+       - B: 증상 → 패턴(유형) → 해결 루틴
+       - C: 기준선 → 원인 → 끊는 방법
+       - D: 오해 → 기준/규칙 → 루틴
+       - E: 프레임 → 예시 감각 → 루틴
+       - F: 오늘 할 일 → 최소 이유 → 루틴
+       - G: 범위 잠금 → 핵심만 남김 → 루틴화
+       - H: 진단 → 원인/기준 → 처방
+
+    [Output JSON Format]
+    {
+      "cluster": "선택된 메인 클러스터 주제 한 줄 요약",
+      "caseType": "A", // A~H 중 하나
+      "target": "타깃 독자 (상황/점수대/기간)",
+      "purpose": "글의 목적 (교육/반박/전략/가이드 등)",
+      "frame": "핵심 프레임 (3C / w2i / 유형 분류 등, 없으면 '미정')",
+      "question": "글에서 반드시 답할 질문 1개"
+    }
+  `,
+
+  writeBlogWsg3: (postBrief: any, resource: any) => `
+    [WSG v3.0 | 3개 목차 케이스 선택형 | 라벨 완전 금지 | 예시 조건부 | 레퍼런스 자동 웹검색 | CTA 금지 | 이모지/구어체 조건부 허용]
+
+    너는 “친절하게 설명하는 전문가” 톤으로 SuperfastSAT 네이버 블로그 포스팅 1편을 작성합니다.
+    본문은 **[RESOURCE]만 근거로 작성**하되, 레퍼런스는 웹 검색 도구를 사용하여 자동 수집해 URL과 함께 기재합니다.
+
+    [POST BRIEF]
+    ${JSON.stringify(postBrief, null, 2)}
+
+    [RESOURCE]
+    ${JSON.stringify(resource, null, 2)}
+
+    ────────────────────────────────
+    1) P0 절대 규칙 (강제)
+    [문체] “합니다/입니다” 체 사용 ( “~다/~이다” 금지).
+    [도입 3파트]
+      [1] 이런 분들에게 도움을 드리고자 썼습니다. (불릿 2~4개)
+      [2] 목차 (반드시 3개 항목, 본문 섹션과 1:1 일치)
+      [3] 바쁘시면 이것만 보세요! (3~4줄 요약)
+    [CTA 금지] 상담/문의/링크 유도 금지. 오직 ‘학습 행동’만 허용.
+    [사실성] RESOURCE에 없는 사실/수치 생성 금지. (필요 시 ‘가상 예시’라 명시)
+
+    2) 최우선 출력 규칙: 라벨 완전 금지
+    - "정의:", "팁:", "체크리스트:" 같은 라벨 절대 금지. 자연스러운 문장으로 서술.
+
+    3) 이모지/구어체 조건부 허용
+    - 이모지: 글 전체 최대 3개 (친절함 목적).
+    - 구어체: 착각을 잡아줄 때만 한 문단 1회 제한.
+
+    4) 본문 구조 (케이스 ${postBrief.caseType} 적용)
+    - 목차 3개 = 본문 헤딩 3개.
+    - 각 섹션은 리소스 내용을 바탕으로 서술.
+
+    5) 레퍼런스 자동 검색 (Tool Usage)
+    - 본문 작성 후, 본문에 나온 핵심 개념/프레임/규칙에 대해 Google Search를 수행하여 신뢰할 수 있는 출처(URL)를 찾으십시오.
+    - 글 하단에 "레퍼런스" 섹션을 만들고 링크를 기재하십시오.
+
+    [작성 시작]
+    위 규칙을 준수하여 블로그 글을 작성하십시오.
+  `,
+
   suggestBlueprint: (topic: string, insightCard: any, styleGuide: string, brandGuide: string, targetAudience: string) => `
     당신은 **SuperfastSAT 블로그 편집장(Architect)**입니다.
     확보된 'Insight Card(재료)'와 'Style Guide(설계도)'를 결합하여, 완벽한 블로그 기획안(Blueprint)을 작성하십시오.

@@ -4,7 +4,7 @@ import { PenTool, Download, RefreshCw, Copy, CheckCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { BlogInput, StyleCard } from '../../types';
-import { runWriterStream, tuneStyle } from '../../services/geminiService';
+import { runWriterStream, runWriterWsg3, tuneStyle } from '../../services/geminiService';
 import { renderPostContent } from '../../utils';
 
 interface Props {
@@ -39,8 +39,13 @@ export default function Step3Writer({ blogInput, styles, knowledgeBaseText }: Pr
     };
 
     useEffect(() => {
-        // Auto-start writing if content is empty (and blueprint is ready)
-        if (!content && blogInput.blueprint && !isStreaming) {
+        // Auto-start writing:
+        // Case A (New): If postBrief exists and no content
+        if (blogInput.postBrief && !content && !isStreaming) {
+            handleStartWriting();
+        }
+        // Case B (Legacy): If blueprint exists and no content
+        else if (blogInput.blueprint && !content && !isStreaming) {
             handleStartWriting();
         }
     }, []);
@@ -51,20 +56,29 @@ export default function Step3Writer({ blogInput, styles, knowledgeBaseText }: Pr
         setProgress(5);
 
         try {
-            // Mock sources for now or pass from insightCard
-            const sources = blogInput.insightCard?.sources.map(s => ({
-                title: s.title,
-                uri: s.url || "Internal DB"
-            })) || [];
+            let stream;
 
-            const stream = runWriterStream(
-                blogInput,
-                styles.styleCard || {} as any, // styles.styleCard might be undefined initially
-                blogInput.insightCard ? JSON.stringify(blogInput.insightCard.facts) : "",
-                sources,
-                styles.styleGuide,
-                styles.brandGuide
-            );
+            // 1. New Workflow: WSG v3.0 (PostBrief based)
+            if (blogInput.postBrief) {
+                stream = runWriterWsg3(blogInput);
+            }
+            // 2. Legacy Workflow: Blueprint based
+            else {
+                // Mock sources for now or pass from insightCard
+                const sources = blogInput.insightCard?.sources.map(s => ({
+                    title: s.title,
+                    uri: s.url || "Internal DB"
+                })) || [];
+
+                stream = runWriterStream(
+                    blogInput,
+                    styles.styleCard || {} as any,
+                    blogInput.insightCard ? JSON.stringify(blogInput.insightCard.facts) : "",
+                    sources,
+                    styles.styleGuide,
+                    styles.brandGuide
+                );
+            }
 
             let fullText = "";
             for await (const chunk of stream) {

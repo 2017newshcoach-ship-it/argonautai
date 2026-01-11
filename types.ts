@@ -87,13 +87,25 @@ export interface Blueprint {
   }[];
 }
 
+export interface PostBrief {
+  cluster: string;
+  caseType: string;
+  target: string;
+  purpose: string;
+  frame: string;
+  question: string;
+}
+
 export interface BlogInput {
   platform: Platform;
   targetAudience: TargetAudience;
   topic: string;
 
   // -- New Workflow State --
+  manualResearchText?: string;
+  researchMode?: 'Auto' | 'Manual';
   insightCard?: InsightCard;
+  postBrief?: PostBrief;
   blueprint?: Blueprint;
 
   // -- Deprecated/Transitioning Fields (Keep for now to avoid breakages during refactor) --

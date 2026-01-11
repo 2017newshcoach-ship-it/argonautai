@@ -1,0 +1,216 @@
+# College Board Digital SAT Suite 출제 원리·학습범위 레퍼런스 (AI Agent 학습용)
+
+버전: 1.1  
+작성일: 2025-12-28 (KST)  
+용도: 블로그/수업자료에 **College Board 공식 문서 근거로 인용·참조**하기 위한 구조화 레퍼런스(“작성용 글”이 아니라 “근거용 요약”임).
+
+## v1.1 변경 요약(v1.0 대비)
+- **난이도/텍스트 복잡도(Text Complexity)·어휘 난이도(High-utility academic vocabulary)** 관련 공식 서술을 별도 섹션으로 추가함. :contentReference[oaicite:0]{index=0} :contentReference[oaicite:1]{index=1} :contentReference[oaicite:2]{index=2}  
+- **RW 지문 길이(“6-character words”) 산정 규칙**, 정보그래픽 문항의 “계산 요구 없음”을 근거와 함께 명시함. :contentReference[oaicite:3]{index=3}  
+- **문항 개발(construct 정의/오답지(distractor) 설계)**의 원칙을 근거와 함께 보강함. :contentReference[oaicite:4]{index=4} :contentReference[oaicite:5]{index=5}  
+- **Practice(연습) 3수준 개념화 + Practice Layer 1~3(선형/적응형/타깃 연습)** 근거를 추가함. :contentReference[oaicite:6]{index=6} :contentReference[oaicite:7]{index=7} :contentReference[oaicite:8]{index=8}  
+- **IRT 기반 스케일링/추측(guessing) 처리 설명**을 문장 단위로 근거 인용 가능하게 정리함. :contentReference[oaicite:9]{index=9} :contentReference[oaicite:10]{index=10}  
+- **Skills Insight ‘Limitations on Use(사용상의 주의)’**를 학습 설계 섹션에 연결해 명시함. :contentReference[oaicite:11]{index=11}  
+
+---
+
+## 0) 출처(원문)
+- College Board, *Assessment Framework for the Digital SAT Suite* (Version 3.01, August 2024)  
+- College Board, *Skills Insight for the Digital SAT Suite*
+
+> 작성 규칙(권장)  
+> - 단정적 서술은 가능하면 **표(Table)·절(Section) 번호**를 함께 적어 근거를 명확히 한다.  
+> - 아래 레퍼런스에 없는 내용은 “추정/해석”으로 라벨링하거나 쓰지 않는다.
+
+---
+
+## 1) Digital SAT Suite의 핵심 목적(출제의 ‘방향성’)
+
+### 1.1 목적: 대학·진로 준비도(College & Career Readiness) 평가
+- Digital SAT Suite는 대학·진로 준비에 필요한 핵심 지식/기술을 측정하도록 설계되며, 시험은 학생이 “무엇을 알고/할 수 있는가”에 대한 **claims(주장)**을 지지하도록 설계된다고 서술된다. :contentReference[oaicite:12]{index=12}  
+- 점수는 대학·훈련에서의 수행 가능성에 대한 유의미한 정보를 제공할 수 있으나, 성적 등 **다른 정보와 함께 해석**되어야 한다는 취지의 안내가 포함된다(점수 해석/보고서 목적 서술). :contentReference[oaicite:13]{index=13}  
+
+---
+
+## 2) Suite 구조: 수직척도(Vertical Scale)와 프로그램 간 연결
+
+### 2.1 수직척도(PSAT 8/9 → PSAT/NMSQT·PSAT 10 → SAT)
+- Digital SAT Suite의 여러 테스트는 같은 수직척도 위에 놓이며(“same vertical scale”), 이는 프로그램 간 성장 추적을 가능케 한다. :contentReference[oaicite:14]{index=14} :contentReference[oaicite:15]{index=15}  
+- 수직척도는 “대체로 동일한 지식/기술을 측정(연령/학년 적합성에 따른 작은 예외)”하기 때문에 가능하다고 설명된다. :contentReference[oaicite:16]{index=16}  
+- 각 프로그램 점수 스케일은 바닥/천장이 계단식(staggered)으로 높아지며, 이것이 수직척도를 돕는다고 서술된다. :contentReference[oaicite:17]{index=17}  
+
+---
+
+## 3) “출제 원리”를 만드는 시험 설계(왜 이런 문항들이 나오나)
+
+### 3.1 2-Stage 적응형(Multistage Adaptive Testing, MST)
+- RW/Math 각 섹션은 **두 개의 ‘따로 타이밍이 걸리는’ 모듈**로 운영되는 two-stage adaptive 설계이다. :contentReference[oaicite:18]{index=18}  
+- 1모듈은 easy~hard가 섞인 routing module이며, 2모듈의 평균 난이도는 1모듈 성과에 맞춰 상/하로 타깃팅된다고 서술된다. :contentReference[oaicite:19]{index=19}  
+- 모듈 내에서는 자유 이동이 가능하지만, **모듈 2로 넘어가면 모듈 1로 돌아갈 수 없고**, RW에서 Math로 넘어간 뒤 RW로 돌아갈 수 없다고 명시된다. :contentReference[oaicite:20]{index=20} :contentReference[oaicite:21]{index=21}  
+
+### 3.2 Embedded Pretesting(비채점 문항 섞어 넣기)
+- 각 모듈에는 operational(채점) 문항 외에 **pretest(비채점) 문항**이 포함되며, 이는 향후 시험 사용 적합성 판단을 위해 포함된다고 설명된다. :contentReference[oaicite:22]{index=22}  
+
+### 3.3 Discrete Questions(RW: 지문 묶음 대신 독립형)
+- RW 문항은 각 문항이 자기 자극 텍스트(또는 2지문)를 갖는 **독립형(discrete)**이며, 문항 간 연결이 없다고 정의한다. :contentReference[oaicite:23]{index=23}  
+
+### 3.4 디지털 전달(Bluebook) 자체가 설계 요소(안정성/접근성 관련 서술)
+- Bluebook은 연결이 끊겨도 답안을 암호화해 기기에 저장하고, 이후 제출하는 방식 등 **작업 손실 방지/시간 효율**을 고려한 설계가 서술된다. :contentReference[oaicite:24]{index=24}  
+
+---
+
+## 4) 시험 “전체 크기” 구조: 섹션·모듈·문항 수/시간/형식(요약)
+
+### 4.1 전체 스펙(디지털 SAT Suite 공통 요약: Table 7)
+- RW: 각 모듈 27문항(25 operational + 2 pretest), 32분×2모듈=64분, 4지선다(Discrete) :contentReference[oaicite:25]{index=25} :contentReference[oaicite:26]{index=26} :contentReference[oaicite:27]{index=27}  
+- Math: 각 모듈 22문항(20 operational + 2 pretest), 35분×2모듈=70분, 4지선다(≈75%) + SPR(≈25%) :contentReference[oaicite:28]{index=28} :contentReference[oaicite:29]{index=29} :contentReference[oaicite:30]{index=30}  
+
+---
+
+## 5) Reading and Writing(RW): 출제 범위 지도(도메인) + Testing Points
+
+### 5.1 RW 4개 도메인(문항 분포)
+- Information and Ideas: ≈26% / 12–14문항 :contentReference[oaicite:31]{index=31}  
+- Craft and Structure: ≈28% / 13–15문항 :contentReference[oaicite:32]{index=32}  
+- Expression of Ideas: ≈20% / 8–12문항 :contentReference[oaicite:33]{index=33}  
+- Standard English Conventions: ≈26% / 11–15문항 :contentReference[oaicite:34]{index=34}  
+
+### 5.2 RW 도메인별 핵심 testing points(College Board 표의 상위 요약)
+- Information and Ideas: Central Ideas and Details / Command of Evidence(텍스트·정량) / Inferences :contentReference[oaicite:35]{index=35}  
+- Craft and Structure: Words in Context / Text Structure and Purpose / Cross-Text Connections :contentReference[oaicite:36]{index=36}  
+- Expression of Ideas: Rhetorical Synthesis / Transitions :contentReference[oaicite:37]{index=37}  
+- Standard English Conventions: Boundaries / Form, Structure, and Sense :contentReference[oaicite:38]{index=38}  
+
+### 5.3 RW 문항 배치(순서) 자체가 말해주는 설계 의도
+- 각 모듈에서 도메인 순서는 **Craft and Structure → Information and Ideas → Standard English Conventions → Expression of Ideas**로 제시된다고 표로 명시된다. :contentReference[oaicite:39]{index=39}  
+- 도메인 내부에서는(SEC 제외) skill/knowledge 요소 단위로 묶고 난이도 쉬움→어려움으로 배열하며, SEC는 요소와 무관하게 쉬움→어려움으로 배열된다고 서술된다. :contentReference[oaicite:40]{index=40}  
+
+---
+
+## 6) Math: 출제 범위 지도(도메인) + Testing Points
+
+### 6.1 Math 4개 도메인(문항 분포, SAT 기준)
+- Algebra: ≈35% / 13–15문항  
+- Advanced Math: ≈35% / 13–15문항  
+- Problem-Solving and Data Analysis: ≈15% / 5–7문항  
+- Geometry and Trigonometry: ≈15% / 5–7문항  
+:contentReference[oaicite:41]{index=41}  
+
+### 6.2 Math 도메인별 핵심 testing points(College Board 표의 상위 요약 예시)
+- Algebra: 선형 방정식/함수, 연립일차, 선형 부등식(프로그램별 차이 표기 가능) :contentReference[oaicite:42]{index=42}  
+- Advanced Math: 등가식 변형, 비선형 방정식/함수(절댓값·이차·지수·다항·유리·무리 등), 선형+비선형 연립 :contentReference[oaicite:43]{index=43}  
+- PSDA: 비율/비/비례, 1변수·2변수 데이터, 확률·추론·연구설계 등(표에 범주로 제시) :contentReference[oaicite:44]{index=44}  
+- Geometry/Trig: 도형의 성질/넓이·부피, 원, 직각삼각비/단위원 등(프로그램별 포함 차이) :contentReference[oaicite:45]{index=45}  
+
+---
+
+## 7) “난이도”에 관한 공식 정보(텍스트·어휘·문장)
+
+> 이 섹션은 “문서에 단어/문장 난이도 같은 내용이 없나?”라는 질문에 대해, **공식 문서에 있는 범위에서만** 학습 설계에 쓸 수 있는 난이도 신호를 모아놓은 것이다.
+
+### 7.1 RW 텍스트 길이/난이도 신호 1: Word count의 정의(6-character words)
+- RW 자극 텍스트는 25–150 words이며, 여기서 “word”는 6 characters로 표준화해(문장부호/공백 포함) 계산한다고 명시한다. :contentReference[oaicite:46]{index=46}  
+
+### 7.2 RW 난이도 신호 2: Text complexity bands(Grades 6–8 / 9–11 / 12–14)
+- RW는 text complexity bands를 Grades 6–8, 9–11, 12–14로 운영하며, PSAT 8/9에서는 Grades 12–14 밴드가 제외된다고 표로 제시한다. :contentReference[oaicite:47]{index=47}  
+- 또한 텍스트 복잡도 밴드(프로그램별 포함/제외)는 Table 27로 정리되어 있다. :contentReference[oaicite:48]{index=48}  
+
+### 7.3 “텍스트 복잡도”를 어떻게 정의/산정하는가(정량+정성)
+- 문서는 텍스트 복잡도를 **정량(quantitative) 도구 + 정성(qualitative) 루브릭**으로 산정한다고 설명한다. :contentReference[oaicite:49]{index=49}  
+- 정량 도구는(문서 서술상) 텍스트 특징(예: **syntactic complexity, academic vocabulary, cohesion** 등)을 기반으로 점수를 예측한다고 설명하며, 예시로 **학술어휘의 빈도/습득 시기(age-of-acquisition)/구체성(concreteness)** 같은 특징을 포함한다고 서술한다. :contentReference[oaicite:50]{index=50}  
+- Skills Insight “Key Concepts”에서도 text complexity를 **정량 지표 + 정성적 루브릭(지식 요구, 의미, 구조, 언어 관례 등)**으로 개념 정의한다. :contentReference[oaicite:51]{index=51}  
+
+### 7.4 “단어 난이도”에 해당하는 공식 단서: High-utility academic vocabulary
+- Craft and Structure 도메인 설명에서 “high-utility academic words and phrases”를 문항이 다룬다고 명시한다. :contentReference[oaicite:52]{index=52}  
+- Skills Insight Key Concepts는 high-utility academic vocabulary를 “다양한 학문 분야에서 자주 쓰이고(반복 노출), 문장/담화의 논리·정확성을 좌우하는 학술적 어휘”로 설명한다. :contentReference[oaicite:53]{index=53}  
+- Skills Insight 성취 밴드 진술에서도 “middle grades 수준 텍스트에서 자주 등장하는 high-utility academic word” → “high school/early college 수준 텍스트에서 복잡한 맥락의 high-utility academic word”처럼, **어휘·맥락 난이도의 상승**이 서술된다. :contentReference[oaicite:54]{index=54} :contentReference[oaicite:55]{index=55}  
+
+### 7.5 “문장 난이도”에 해당하는 공식 단서: 미묘한 경계/구두점 상황
+- Skills Insight의 Standard English Conventions 상위 밴드 진술은 “긴 주어-서술부 사이”, “미묘한 경계(boundary)” 같은 **구두점/경계 판별이 어려운 상황**을 예로 든다. :contentReference[oaicite:56]{index=56}  
+
+### 7.6 Math의 ‘문장 난이도’ 관련 공식 단서(제한적)
+- Assessment Framework는 Math 문항에 대해 **텍스트 복잡도를 목표로 하지는 않지만**, 학생 수준에 맞는 명확한 언어 사용을 해야 한다는 취지의 문장을 포함한다. :contentReference[oaicite:57]{index=57}  
+
+---
+
+## 8) 문항 개발/출제 의도에 직접 연결되는 개발 원칙(공식 서술)
+
+### 8.1 Construct(측정 대상) 정의가 먼저다
+- 문서는 디지털 SAT Suite 설계 초기에 **측정할 construct(개념)과 content domain(범주)**를 정의했다고 설명한다. :contentReference[oaicite:58]{index=58}  
+
+### 8.2 RW: Topic-specific prior knowledge는 측정하지 않는다
+- RW 섹션 설명에서 “topic-specific prior knowledge is not assessed”라고 명시한다. :contentReference[oaicite:59]{index=59}  
+
+### 8.3 오답지(distractor) 설계 원칙(대표 서술)
+- RW: distractor는 전형적 오류를 반영하되 key와 경쟁하지 않도록 설계된다고 정의한다. :contentReference[oaicite:60]{index=60}  
+- Math: distractor도 전형적 오류에 정렬하되 key와 경쟁하지 않도록 설계된다고 표에서 정의한다. :contentReference[oaicite:61]{index=61}  
+
+---
+
+## 9) 점수 산출과 해석(“맞춘 개수”만으로 설명되지 않는 이유)
+
+### 9.1 점수 스케일(섹션/총점)
+- 디지털 SAT Suite는 섹션 점수와 총점(섹션 합)을 보고하며, 스케일 범위는 종이 기반 SAT Suite와 동일 범위를 사용한다고 설명한다. :contentReference[oaicite:62]{index=62}  
+- 스케일 요약(Table 2): SAT 총점 400–1600, 섹션 200–800(10점 단위) 등. :contentReference[oaicite:63]{index=63}  
+
+### 9.2 채점(1/0) + SPR 정규화(cleansing)
+- 객관식은 선택 응답을 정답키와 비교해 1/0으로 채점한다고 명시한다. :contentReference[oaicite:64]{index=64}  
+- SPR은 입력을 정규화/정제한 뒤 정답(복수 가능)과 비교해 1/0으로 채점한다고 설명한다. :contentReference[oaicite:65]{index=65}  
+
+### 9.3 IRT 기반 스케일링: 난이도·응답패턴(추측 포함) 반영
+- 디지털 SAT Suite는 IRT 프레임워크로 개발되며, 점수는 (1) 정오, (2) 문항 속성(난이도 등), (3) 응답 패턴이 추측을 시사하는지 여부의 함수라고 명시한다. :contentReference[oaicite:66]{index=66}  
+- 따라서 서로 다른 폼에서 같은 정답 개수라도 다른 스케일 점수가 나올 수 있다고 서술한다. :contentReference[oaicite:67]{index=67}  
+
+### 9.4 추측(guessing) 관련 설명(“guessing penalty”와 구분)
+- IRT scoring model이 응답 패턴을 평가해 추측 가능성을 추정할 수 있으나, 과거 SAT의 “guessing penalty”와 같은 문항 단위 벌점과는 다르다고 설명한다. :contentReference[oaicite:68]{index=68}  
+- College Board는 가능한 한 답하되, 무작위로 한 옵션만 찍는 전략은 점수에 도움이 되기 어렵다고 조언한다. :contentReference[oaicite:69]{index=69}  
+
+### 9.5 Skills Insight: 점수 의미를 ‘성취 진술’로 해석(주의사항 포함)
+- Skills Insight는 점수대별로 학생이 “대체로 할 수 있는 것”을 기술하고, 일반화 진술은 다수 응시자·다수 문항 기반이며 개인을 단정하면 안 된다고 경고한다. :contentReference[oaicite:70]{index=70} :contentReference[oaicite:71]{index=71}  
+- 또한 Skills Insight/시험이 학생이 배워야 할 모든 것을 대표하지 않으며, 교육을 과도하게 시험 범위로 좁히지 말아야 한다고 명시한다. :contentReference[oaicite:72]{index=72}  
+- performance score bands(7개)와 각 band 점수 범위(Table 3) 및 benchmark(Table 4)가 제시된다. :contentReference[oaicite:73]{index=73} :contentReference[oaicite:74]{index=74}  
+
+---
+
+## 10) 학습/연습 설계에 직접 쓰이는 공식 구조(Practice)
+
+### 10.1 Practice의 목적(공식 개념화: 3수준)
+- Practice는 (i) **digital assessment readiness(Bluebook/응답 방식 익숙해지기)**, (ii) **test wisdom(문항 유형·개선 포인트 파악)**, (iii) **skill/knowledge building(지속 가능한 학업 능력)**의 3수준으로 개념화된다고 설명한다. :contentReference[oaicite:75]{index=75}  
+
+### 10.2 Practice Layer 1~3(선형/적응형/타깃 연습) 구조
+- College Board는 연습 기회를 “practice layers”로 구분해 표로 제시한다(예: Layer 1 linear nonadaptive full-length practice test, Layer 2 full-length adaptive practice test, Layer 3 targeted practice). :contentReference[oaicite:76]{index=76}  
+- Layer 1(선형 연습)은 실제 적응형 라우팅을 구현하지 않는다고 설명한다. :contentReference[oaicite:77]{index=77}  
+
+### 10.3 학습 설계 시의 ‘제한/주의’(시험 준비의 과도한 협소화 금지)
+- Skills Insight는 시험에서 측정하는 역량이 중요하더라도, 그것이 중등 교육에서 학생이 배워야 할 전부가 아니며, **instruction을 Skills Insight에만 좁히지 말라**고 명시한다. :contentReference[oaicite:78]{index=78}  
+
+---
+
+## 11) 수업/포스팅용 “설명 템플릿”(근거 기반 문장 골격)
+아래 문장들은 위 표/절 근거로 “사실” 서술이 가능하도록 만든 골격이다(필요 시 표/절 번호를 함께 적는다).
+
+1) “Digital SAT는 RW와 Math 두 섹션으로 구성되며, 각 섹션은 2-stage 적응형으로 두 개의 separately timed modules로 운영된다(모듈 전환 후 이전 모듈로 복귀 불가).” :contentReference[oaicite:79]{index=79} :contentReference[oaicite:80]{index=80}  
+2) “RW는 1모듈 27문항(25 scored + 2 pretest), 32분이며, 문항은 discrete 4지선다이고 자극 텍스트는 25–150(6-character) words이다.” :contentReference[oaicite:81]{index=81} :contentReference[oaicite:82]{index=82}  
+3) “Math는 1모듈 22문항(20 scored + 2 pretest), 35분이며, 문항은 4지선다(≈75%)와 SPR(≈25%)로 구성된다.” :contentReference[oaicite:83]{index=83} :contentReference[oaicite:84]{index=84}  
+4) “RW는 4개 도메인(Information & Ideas / Craft & Structure / Standard English Conventions / Expression of Ideas)으로 구성되며, 각 모듈에서 도메인 순서가 고정되어 제시된다.” :contentReference[oaicite:85]{index=85} :contentReference[oaicite:86]{index=86}  
+5) “RW의 텍스트 난이도는 text complexity bands(Grades 6–8, 9–11, 12–14)로 운영되며, 문서상 텍스트 복잡도는 정량 도구와 정성 루브릭을 결합해 산정된다.” :contentReference[oaicite:87]{index=87} :contentReference[oaicite:88]{index=88}  
+6) “점수는 IRT 기반으로 정오뿐 아니라 문항 난이도 및 응답 패턴(추측 시사 여부)이 반영될 수 있으므로, 같은 정답 수라도 다른 스케일 점수가 가능하다.” :contentReference[oaicite:89]{index=89}  
+7) “Skills Insight는 점수 밴드별 ‘전형적 수행’을 요약한 진술이며, 개인을 단정하거나 교육을 시험 범위로만 좁히지 말아야 한다.” :contentReference[oaicite:90]{index=90}  
+
+---
+
+## 12) AI Agent용 ‘사실/해석’ 구분 규칙(권장)
+- 사실(Fact): Assessment Framework/Skills Insight에 **직접 서술**되거나 표에 **수치로 제시**된 내용만.  
+- 해석(Interpretation): 사실을 바탕으로 한 교육적 시사점은 가능하나, “해석” 라벨 또는 완화 표현(‘~라고 볼 수 있다’)을 사용한다.  
+- 금지: 근거 없이 “College Board는 ~을 의도했다”처럼 목적을 단정하는 서술.
+
+---
+
+## 13) 최소 인덱스(빠른 근거 찾기용)
+- Overall test specs: AF Table 7 :contentReference[oaicite:91]{index=91}  
+- RW high-level specs/sequence: AF Table 8~9(및 3.1.1) :contentReference[oaicite:92]{index=92}  
+- RW domain distribution/testing points: AF Table 10(및 Appendix A29/A33) :contentReference[oaicite:93]{index=93} :contentReference[oaicite:94]{index=94}  
+- Math domain distribution: AF Table 16 :contentReference[oaicite:95]{index=95}  
+- Text complexity bands/table: AF Table 27 :contentReference[oaicite:96]{index=96}  
+- IRT/guessing/scoring: AF(Guessing 박스 + IRT 설명 + 1/0 채점) :contentReference[oaicite:97]{index=97}  
+- Skills Insight bands/benchmarks/limitations: Skills Insight Table 3~4 + Limitations on Use :contentReference[oaicite:98]{index=98} :contentReference[oaicite:99]{index=99}  

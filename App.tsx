@@ -4,8 +4,9 @@ import { PenTool, Layers, BookOpen, Settings, ChevronRight, Check } from 'lucide
 
 // New Architecture Components
 import Step1Research from './components/steps/Step1Research';
-import Step2Architect from './components/steps/Step2Architect';
-import Step3Writer from './components/steps/Step3Writer';
+import Step2Architect from './components/steps/Step2Architect'; // Legacy: can be bypassed or kept as alternative
+import Step3Briefing from './components/steps/Step3Briefing'; // NEW
+import Step3Writer from './components/steps/Step3Writer'; // Renamed logically to Step 4 in UI
 
 import { BlogInput, Platform, TargetAudience, StyleCard } from './types';
 import { analyzeStyle } from './services/geminiService';
@@ -58,13 +59,22 @@ function App() {
   }, []);
 
   // -- Handlers --
-  const handleStrategyComplete = () => setStep(2);
-  const handleArchitectComplete = () => setStep(3);
+  // New Flow: Research (1) -> Briefing (3, skipping 2 Architect for now or making it optional) -> Writer (4)
+  // But to keep it simple, we will sequence them: 1 -> 3 -> 4.
+  // We can keep Step2Architect reachable if needed, but let's prioritize the new flow.
+
+  const handleResearchComplete = () => {
+    // If Auto Mode or Manual Mode, go to Briefing (Step 3)
+    setStep(3);
+  };
+
+  const handleBriefingComplete = () => setStep(4);
+  const handleBackToResearch = () => setStep(1);
 
   const steps = [
     { num: 1, title: 'Deep Research', icon: <BookOpen className="w-5 h-5" /> },
-    { num: 2, title: 'The Architect', icon: <Layers className="w-5 h-5" /> },
-    { num: 3, title: 'The Writer', icon: <PenTool className="w-5 h-5" /> }
+    { num: 3, title: 'Post Briefing', icon: <Layers className="w-5 h-5" /> },
+    { num: 4, title: 'The Writer', icon: <PenTool className="w-5 h-5" /> }
   ];
 
   return (
@@ -84,12 +94,13 @@ function App() {
             <button
               key={s.num}
               onClick={() => setStep(s.num)}
-              disabled={s.num > step}
+              // Allow jumping back, but strict forward
+              disabled={step < s.num}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${step === s.num
-                  ? 'bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100 font-bold'
-                  : step > s.num
-                    ? 'text-gray-400 bg-gray-50'
-                    : 'text-gray-300'
+                ? 'bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100 font-bold'
+                : step > s.num
+                  ? 'text-gray-400 bg-gray-50'
+                  : 'text-gray-300'
                 }`}
             >
               <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${step === s.num ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100'
@@ -163,21 +174,23 @@ function App() {
               <Step1Research
                 blogInput={blogInput}
                 setBlogInput={setBlogInput}
-                onNext={handleStrategyComplete}
+                onNext={handleResearchComplete}
                 knowledgeBaseText={knowledgeBaseText}
               />
             )}
 
-            {step === 2 && (
-              <Step2Architect
+            {/* Step 2 Architect is currently skipped in this new flow, but code remains for safety */}
+
+            {step === 3 && (
+              <Step3Briefing
                 blogInput={blogInput}
                 setBlogInput={setBlogInput}
-                onNext={handleArchitectComplete}
-                styles={{ styleGuide: manualGuide, brandGuide: brandLibrary }}
+                onNext={handleBriefingComplete}
+                onBack={handleBackToResearch}
               />
             )}
 
-            {step === 3 && (
+            {step === 4 && (
               <Step3Writer
                 blogInput={blogInput}
                 styles={{ styleGuide: manualGuide, brandGuide: brandLibrary, styleCard }}
